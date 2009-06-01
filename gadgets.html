@@ -1,0 +1,49 @@
+<html>
+
+<head>
+<style>
+body   { background: #8888cc; }
+iframe { background: #ffffff; width: 49%; height: 50%; }
+#state  { background: #cccccc; width: 99%; height: 25%; font-family: courier;}
+</style>
+
+<script src="jquery-1.3.2.min.js"></script>
+<script src="gadgetemulator.js"></script>
+<script type="text/javascript" src="http://wave-api.appspot.com/public/wave.js"></script>
+</head>
+<body>
+
+Quick and dirty <a href="http://wave.google.com/">Google Wave</a> Gadget API emulator. By <a href="http://www.hokstad.com/blog">Vidar Hokstad</a>
+See <a href="http://www.hokstad.com/google-wave-gadget-emulator.html">This blog post for more info</a>
+<br>
+<form id="load" method="get" action="#">
+Gadget XML source: <input id="g" type="text" name="g" value="fridge.xml" /> (try 'bidder.xml', 'button-counter.xml' or 'fridge.xml')
+<input type="submit" name="load" value="load" />
+</form>
+<br/>
+
+<div id="frames">
+<iframe></iframe><iframe></iframe>
+</div>
+<br/>
+<h3>Gadget state</h3>
+<form>
+<textarea id="state">
+The state of the gadget will be printed here
+</textarea>
+</form>
+
+<script>
+$(document).ready(function() {
+	$("#load").submit(function() {
+	    $('#frames').html("<iframe id='part1' src='participantframe.html'></iframe> <iframe id='part2' src='participantframe.html'></iframe>")
+		gadgets = new Gadgets();
+		gadgets._add_participant(0,window.frames[0], "John", 'http://gadget-doc-examples.googlecode.com/svn/trunk/images/unknown.gif');
+	    gadgets._add_participant(1,window.frames[1], "Peter", 'http://gadget-doc-examples.googlecode.com/svn/trunk/images/unknown.gif');
+		gadgets._load($("#g").val());
+		return false;
+	});
+})
+</script>
+</body>
+</html>
