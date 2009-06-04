@@ -22,12 +22,12 @@ Gadgets.prototype = {
 			for (var p in gadgets._participants) {
 				var part = gadgets._participants[p];
 				var doc = part.part.document;
-				doc.write("<script src=\"jquery-1.3.2.min.js\"></script>");
-				doc.write("<script>var _participant_id="+part.id+";</script>");
+				doc.write("<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js\"></script>");
+				doc.write("<script>document._participant_id="+part.id+";</script>");
 				doc.write("<script src=\"gadgetemulator.js\"></script>");
 				doc.write("<h3>Participant "+part.id+" - " +part.displayName+"</strong>");
 				doc.write(text);
-				doc.write("<script>gadgets.util._ready()</script>");
+				doc.write("<script>gadgets.util._ready("+part.id+")</script>");
 			}
 		}, error: function() { alert("Load failed"); }
    	  })
@@ -85,11 +85,11 @@ Gadgets.prototype = {
 
 	util: { 
 		registerOnLoadHandler: function(f) {
-		this._onload_handler = f;
+			document._gadgets_onload_handler = f;
 	f();
 		},
-		_ready: function() {
-			if (this._onload_handler) this._onload_handler();
+		_ready: function(pid) {
+			if (document._gadgets_onload_handler) document._gadgets_onload_handler();
 		},
 		getUrlParameters: function() { return {wave: new Wave()}; }
 	},
@@ -99,7 +99,7 @@ Gadgets.prototype = {
 			window.top.gadgets._call(cmd,params);
 		},
 		register: function(endpoint, cb) {
-			window.top.gadgets._register(_participant_id,endpoint,cb);
+			window.top.gadgets._register(document._participant_id,endpoint,cb);
 		}
 	}
 }
